@@ -1,0 +1,25 @@
+{
+  "name": "reviews-service",
+  "version": "1.0.0",
+  "description": "Atelier reviews service",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "import": "node db/csv-import.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Team-Droid-SDC/reviews-service.git"
+  },
+  "author": "Gil Cohen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Team-Droid-SDC/reviews-service/issues"
+  },
+  "homepage": "https://github.com/Team-Droid-SDC/reviews-service#readme",
+  "dependencies": {
+    "csv-stream": "^0.2.0",
+    "fs": "^0.0.1-security",
+    "path": "^0.12.7",
+    "pg": "^8.7.3"
+  }
+}
