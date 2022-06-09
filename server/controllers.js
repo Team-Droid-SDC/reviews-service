@@ -8,12 +8,10 @@ const models = require('./models');
  * @query { string } sort - "newest", "helpful", or "relevant"
  */
 exports.getReviews = (req, res) => {
-  // res.send('fetching reviews from product id: ' + JSON.stringify(req.query));
+  const page = (req.query.page < 1) ? 1 : req.query.page;
+  const count = (req.query.count < 1) ? 5 : req.query.count;
   models.reviewsQuery(req.query)
-    .then(result => {
-      console.log(result.rows);
-      res.send(result.rows);
-    })
+    .then(result => res.send(result.rows.slice(count * (page - 1), page * count)))
     .catch(err => console.log(err));
 };
 
