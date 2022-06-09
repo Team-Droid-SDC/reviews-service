@@ -8,8 +8,13 @@ const models = require('./models');
  * @query { string } sort - "newest", "helpful", or "relevant"
  */
 exports.getReviews = (req, res) => {
-  res.send('fetching reviews from product id: ' + JSON.stringify(req.query));
-  models.grabReviews(...req.query)
+  // res.send('fetching reviews from product id: ' + JSON.stringify(req.query));
+  models.reviewsQuery(req.query)
+    .then(result => {
+      console.log(result.rows);
+      res.send(result.rows);
+    })
+    .catch(err => console.log(err));
 };
 
 /**

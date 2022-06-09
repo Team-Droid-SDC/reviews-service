@@ -6,7 +6,7 @@ const { client } = require('../db');
  * @param {int} count
  * @param {string} sort - "newest", "helpful", or "relevant"
  */
-exports.reviewsQuery = (product_id, page, count, sort) => {
+exports.reviewsQuery = ({ product_id, page = 1, count = 5, sort }) => {
   const query = `SELECT * from reviews
     where (
       product_id = $1 and reported = false and (
@@ -16,13 +16,8 @@ exports.reviewsQuery = (product_id, page, count, sort) => {
             $3 * $2
         )
       )
-    )`
-  const values = [product_id, page, count, sort];
-  return client.query(query, values, (err, res) => {
-    if (err) {
-      return err;
-    } else {
-      return res;
-    }
-  })
+    )
+  `
+  const values = [product_id, page, count];
+  return client.query(query, values)
 }
