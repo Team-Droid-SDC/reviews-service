@@ -1,0 +1,35 @@
+{
+  "name": "reviews-service",
+  "version": "1.0.0",
+  "description": "Atelier reviews service",
+  "scripts": {
+    "start": "node server",
+    "server-dev": "nodemon server",
+    "db": "node db",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "import": "node db/csv-import.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Team-Droid-SDC/reviews-service.git"
+  },
+  "author": "Gil Cohen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Team-Droid-SDC/reviews-service/issues"
+  },
+  "homepage": "https://github.com/Team-Droid-SDC/reviews-service#readme",
+  "dependencies": {
+    "csv-stream": "^0.2.0",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "fs": "^0.0.1-security",
+    "nodemon": "^2.0.16",
+    "path": "^0.12.7",
+    "pg": "^8.7.3",
+    "pg-copy-streams": "^6.0.2"
+  },
+  "devDependencies": {
+    "eslint": "^8.17.0"
+  }
+}
