@@ -40,7 +40,6 @@ exports.metaQuery = ({ product_id }) => {
   return client.query(`
     SELECT json_build_object(
       'product_id', $1::int,
-
       'ratings', (
         SELECT
           json_object_agg(r.ref, r.num) result
@@ -56,7 +55,6 @@ exports.metaQuery = ({ product_id }) => {
           ORDER BY ref
         ) r
       ),
-
       'recommended', (
         SELECT json_build_object(
           '0', (
@@ -79,7 +77,6 @@ exports.metaQuery = ({ product_id }) => {
           )
         )
       ),
-
       'characteristics', (
         SELECT json_object_agg(
           name,
@@ -87,7 +84,7 @@ exports.metaQuery = ({ product_id }) => {
               SELECT json_build_object(
                 'id', characteristics.id,
                 'value', (SELECT
-                    AVG(value)
+                    ROUND(AVG(value)::numeric, 4)
                   FROM
                     characteristic_reviews
                   WHERE (
@@ -101,7 +98,25 @@ exports.metaQuery = ({ product_id }) => {
           product_id = $1
         )
       )
-
     ) data
   `, [product_id]);
+}
+
+/**
+ *
+ * @param {ReviewObject} review
+ * {
+ *  product_id,
+ *  rating,
+ *  summary,
+ *  body,
+ *  recommend,
+ *  name,
+ *  email,
+ *  photos,
+ *  characteristics
+ * }
+ */
+exports.insertReview = (review) => {
+
 }
