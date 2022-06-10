@@ -8,11 +8,25 @@ const models = require('./models');
  * @query { string } sort - "newest", "helpful", or "relevant"
  */
 exports.getReviews = (req, res) => {
-  const page = (req.query.page < 1) ? 1 : req.query.page;
-  const count = (req.query.count < 1) ? 5 : req.query.count;
-  models.reviewsQuery(req.query)
-    .then(result => res.send(result.rows.slice(count * (page - 1), page * count)))
-    .catch(err => console.log(err));
+  if (!req.query.product_id) {
+    res.sendStatus(400);
+    return;
+  }
+  const page = (req.query.page > 0) ? req.query.page : '1';
+  const count = (req.query.count > 0) ? req.query.count : '5';
+  models.reviewsQuery({...req.query, page, count})
+    .then((reviewsResult) => {
+      res.send({
+        product: req.query.product_id,
+        page: parseInt(page),
+        count: parseInt(count),
+        results: reviewsResult.rows
+      });
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(400).send(err)
+    });
 };
 
 /**
@@ -20,7 +34,15 @@ exports.getReviews = (req, res) => {
  * @query { int } product_id
  */
 exports.getReviewsMeta = (req, res) => {
-  res.send('fetching reviews meta');
+  models.metaQuery(req.query)
+    .then(metaResult => {
+      // console.log(metaResult.rows);
+      res.send(metaResult.rows[0].data);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(400).send(err);
+    });
 };
 
 /**
