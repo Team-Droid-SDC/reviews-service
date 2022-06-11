@@ -8,8 +8,8 @@ const { client } = require('../db');
  * @returns {Promise} query
  */
 exports.reviewsQuery = ({ product_id, page, count, sort }) => {
-  const sortQuery = sort === 'newest' ? 'date desc' : 'helpfulness desc';
-  const query = `
+  const sortQuery = sort === 'newest' ? 'date asc' : 'helpfulness desc';
+  return client.query(`
   SELECT
     review_id, rating, summary, recommend, response, body, date, reviewer_name, helpfulness, photos
   FROM
@@ -20,15 +20,13 @@ exports.reviewsQuery = ({ product_id, page, count, sort }) => {
       ROW_NUMBER () OVER (ORDER BY ${sortQuery}) row
       FROM reviews LEFT OUTER JOIN reviews_photos ON reviews.id = review_id
       WHERE (
-        product_id = $1
+        product_id = ${product_id}
       )
       GROUP BY reviews.id
     ) AS data
-    WHERE row BETWEEN (($2 - 1) * $3 + 1) AND ($2 * $3)
+    WHERE row BETWEEN ((${page} - 1) * ${count} + 1) AND (${page} * ${count})
     ORDER BY row
-  `
-  const values = [product_id, page, count];
-  return client.query(query, values)
+  `)
 }
 
 /**
@@ -39,7 +37,7 @@ exports.reviewsQuery = ({ product_id, page, count, sort }) => {
 exports.metaQuery = ({ product_id }) => {
   return client.query(`
     SELECT json_build_object(
-      'product_id', $1::int,
+      'product_id', ${product_id},
       'ratings', (
         SELECT
           json_object_agg(r.ref, r.num) result
@@ -50,7 +48,7 @@ exports.metaQuery = ({ product_id }) => {
           FROM
             unnest(ARRAY [1, 2, 3, 4, 5]) ref
             LEFT JOIN
-              reviews ON (ref = rating AND product_id = $1::int)
+              reviews ON (ref = rating AND product_id = ${product_id})
           GROUP BY ref
           ORDER BY ref
         ) r
@@ -63,7 +61,7 @@ exports.metaQuery = ({ product_id }) => {
             FROM
               reviews
             WHERE (
-              product_id = $1::int AND recommend = false
+              product_id = ${product_id} AND recommend = false
             )
           ),
           '1', (
@@ -72,7 +70,7 @@ exports.metaQuery = ({ product_id }) => {
             FROM
               reviews
             WHERE (
-              product_id = $1::int AND recommend = true
+              product_id = ${product_id} AND recommend = true
             )
           )
         )
@@ -95,11 +93,11 @@ exports.metaQuery = ({ product_id }) => {
             )
         ) from characteristics
         WHERE (
-          product_id = $1
+          product_id = ${product_id}
         )
       )
     ) data
-  `, [product_id]);
+  `);
 }
 
 /**
@@ -108,15 +106,34 @@ exports.metaQuery = ({ product_id }) => {
  * {
  *  product_id,
  *  rating,
- *  summary,
+ *  *optional* summary,
  *  body,
  *  recommend,
  *  name,
  *  email,
- *  photos,
+ *  *optional* photos,
  *  characteristics
  * }
  */
 exports.insertReview = (review) => {
+  return client.query(`
+    INSERT INTO reviews (
+      product_id,
+      rating,
+      summary,
+      body,
+      recommend,
+      reviewer_name,
+      reviewer_email
+    ) VALUES (
+      '${review.product_id}',
+      '${review.rating}',
+      '${review.summary}',
+      '${review.body}',
+      '${review.recommend}',
+      '${review.name}',
+      '${review.email}'
+    );
 
+  `)
 }

@@ -16,6 +16,10 @@ exports.getReviews = (req, res) => {
   const count = (req.query.count > 0) ? req.query.count : '5';
   models.reviewsQuery({...req.query, page, count})
     .then((reviewsResult) => {
+      reviewsResult.rows.map(item => {
+        item.date = new Date(+item.date).toISOString();
+        return item;
+      })
       res.send({
         product: req.query.product_id,
         page: parseInt(page),
@@ -36,7 +40,6 @@ exports.getReviews = (req, res) => {
 exports.getReviewsMeta = (req, res) => {
   models.metaQuery(req.query)
     .then(metaResult => {
-      // console.log(metaResult.rows);
       res.send(metaResult.rows[0].data);
     })
     .catch(err => {
@@ -59,7 +62,13 @@ exports.getReviewsMeta = (req, res) => {
  *
  */
 exports.postReviews = (req, res) => {
-  res.send('posting to reviews');
+  models.insertReview(req.body)
+    .then(() => res.sendStatus(201))
+    .catch(err => {
+      console.log(err);
+      res.status(400).send(err)
+    });
+  // res.send('posting to reviews');
 };
 
 /**
