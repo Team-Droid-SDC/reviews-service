@@ -135,6 +135,6 @@ exports.insertReview = (review) => {
       '${review.name}',
       '${review.email}'
     );
-
+    INSERT INTO 
   `)
 }
