@@ -55,7 +55,7 @@ exports.metaQuery = ({ product_id }) => {
       ),
       'recommended', (
         SELECT json_build_object(
-          '0', (
+          'false', (
             SELECT
               COUNT(*)
             FROM
@@ -64,7 +64,7 @@ exports.metaQuery = ({ product_id }) => {
               product_id = ${product_id} AND recommend = false
             )
           ),
-          '1', (
+          'true', (
             SELECT
               COUNT(*)
             FROM
@@ -135,6 +135,6 @@ exports.insertReview = (review) => {
       '${review.name}',
       '${review.email}'
     );
-    INSERT INTO 
+    INSERT INTO
   `)
 }

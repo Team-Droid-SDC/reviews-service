@@ -20,7 +20,7 @@ exports.getReviews = (req, res) => {
         item.date = new Date(+item.date).toISOString();
         return item;
       })
-      res.send({
+      res.status(200).send({
         product: req.query.product_id,
         page: parseInt(page),
         count: parseInt(count),
