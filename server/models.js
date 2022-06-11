@@ -81,7 +81,8 @@ exports.metaQuery = ({ product_id }) => {
             (
               SELECT json_build_object(
                 'id', characteristics.id,
-                'value', (SELECT
+                'value', (
+                  SELECT
                     ROUND(AVG(value)::numeric, 4)
                   FROM
                     characteristic_reviews
