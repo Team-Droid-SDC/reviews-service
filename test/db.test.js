@@ -1,14 +1,18 @@
-const { doesNotMatch } = require('assert');
+/* eslint-disable no-undef */
 const assert = require('assert');
 const { client } = require('../db');
 const models = require('../server/models');
 
+// close db connection after all tests to exit mocha test
+after(async () => {
+  client.end();
+});
+
 describe('Database Connection', () => {
   it('should load and log current time', () => {
     client.query('SELECT NOW()');
-    assert.equal(true, true);
   });
-  it('should be able to get all columns from reviews by product ID', async () => {
+  it('should be able to get all reviews by product ID', async () => {
     const productIds = [1, 500, 7000, 40];
     const results = [];
     for (let i = 0; i < productIds.length; i++) {
@@ -115,8 +119,7 @@ describe('Model queries', () => {
     });
   });
   describe('MetaQuery', () => {
-    it('FILL IN MIGHT NEED ASYNC', () => {
-
+    it('FILL IN', async () => {
     });
   });
 });
