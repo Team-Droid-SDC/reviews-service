@@ -117,6 +117,7 @@ exports.metaQuery = ({ product_id }) => {
  * }
  */
 exports.insertReview = (review) => {
+  console.log(review);
   return client.query(`
     INSERT INTO reviews (
       product_id,
@@ -135,6 +136,8 @@ exports.insertReview = (review) => {
       '${review.name}',
       '${review.email}'
     );
-    INSERT INTO
+    INSERT INTO reviews_photos (
+
+    )
   `)
 }
