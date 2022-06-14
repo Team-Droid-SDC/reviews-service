@@ -2,7 +2,6 @@ const express = require('express');
 const cors = require('cors');
 const ctrl = require('./controllers');
 require('dotenv').config();
-// loaderio-731d1b9df75aa4d30a5171ce5d6f1f0b
 // initialize server
 const app = express();
 app.use(express.json());
