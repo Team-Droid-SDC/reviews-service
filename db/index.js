@@ -8,7 +8,7 @@ const client = new Client({
   password: process.env.DB_PASS,
   port: process.env.DB_PORT,
 });
-client.connect((err) => {
+client.connect((err, result) => {
   if (err) {
     console.log(err);
   }
