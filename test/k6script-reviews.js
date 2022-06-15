@@ -6,7 +6,7 @@ duration: "30s", //how long you want it to run
 };
 //Below randomize the endpoints
 export default function () {
-http.get(`http://localhost:8080/reviews/?product_id=${Math.floor(Math.random() * (1000000 - 1 + 1)) + 1}`);
+http.get(`http://localhost:8080/reviews/?product_id=${Math.floor(Math.random() * (1000000)) + 1}`);
 }
 
-// k6 run test/script.js
+// k6 run test/k6script-reviews.js
