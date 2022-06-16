@@ -16,16 +16,17 @@ exports.reviewsQuery = ({ product_id, page, count, sort }) => {
     (
     SELECT
       reviews.id AS review_id, rating, summary, recommend, response, body, date, reviewer_name, helpfulness,
-      ARRAY_REMOVE ( ARRAY_AGG (url), NULL ) photos,
-      ROW_NUMBER () OVER (ORDER BY ${sortQuery}) row
-      FROM reviews LEFT OUTER JOIN reviews_photos ON reviews.id = review_id
+      ARRAY_REMOVE ( ARRAY_AGG (url), NULL ) photos
+      FROM reviews
+      LEFT OUTER JOIN reviews_photos
+        ON reviews.id = review_id
       WHERE (
         product_id = ${product_id}
       )
       GROUP BY reviews.id
     ) AS data
-    WHERE row BETWEEN ((${page} - 1) * ${count} + 1) AND (${page} * ${count})
-    ORDER BY row
+    LIMIT ${count} OFFSET (${count} * (${page} - 1))
+    ORDER BY ${sortQuery}
   `)
 }
 
