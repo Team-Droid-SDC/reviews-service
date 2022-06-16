@@ -25,8 +25,8 @@ exports.reviewsQuery = ({ product_id, page, count, sort }) => {
       )
       GROUP BY reviews.id
     ) AS data
-    LIMIT ${count} OFFSET (${count} * (${page} - 1))
     ORDER BY ${sortQuery}
+    LIMIT ${count} OFFSET (${count} * (${page} - 1))
   `)
 }
 
