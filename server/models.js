@@ -10,26 +10,27 @@ const { client } = require('../db');
 exports.reviewsQuery = ({ product_id, page, count, sort }) => {
   const sortQuery = sort === 'newest' ? 'date asc' : 'helpfulness desc';
   return client.query(`
-  SELECT
-    review_id, rating, summary, recommend, response, body, date, reviewer_name, helpfulness, photos
-  FROM
-    (
     SELECT
-      reviews.id AS review_id, rating, summary, recommend, response, body, date, reviewer_name, helpfulness,
-      ARRAY_REMOVE ( ARRAY_AGG (url), NULL ) photos
+      reviews.id, rating, summary, recommend, response, body, date, reviewer_name, helpfulness,
+      COALESCE (
+        ARRAY_AGG (url)
+          FILTER (WHERE url = null), '[]'
+      ) photos
+
       FROM reviews
-      LEFT OUTER JOIN reviews_photos
-        ON reviews.id = review_id
       WHERE (
         product_id = ${product_id}
       )
-      GROUP BY reviews.id
-    ) AS data
-    ORDER BY ${sortQuery}
-    LIMIT ${count} OFFSET (${count} * (${page} - 1))
+      ORDER BY ${sortQuery}
+      LIMIT ${count} OFFSET (${count} * (${page} - 1))
   `)
 }
-
+      // ARRAY_REMOVE ( (
+      //   SELECT
+      //     ARRAY_AGG (url)
+      //       FROM reviews_photos
+      //       WHERE reviews_photos.review_id = reviews.id
+      // ), NULL ) photos
 /**
  *
  * @param {int} product_id

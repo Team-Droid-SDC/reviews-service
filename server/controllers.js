@@ -22,8 +22,8 @@ exports.getReviews = (req, res) => {
       })
       res.status(200).send({
         product: req.query.product_id,
-        page: parseInt(page),
-        count: parseInt(count),
+        page: page,
+        count: count,
         results: reviewsResult.rows
       });
     })
