@@ -15,9 +15,6 @@ app.use(cors());
 // routes
 app.get('/reviews', ctrl.getReviews);
 app.get('/reviews/meta', ctrl.getReviewsMeta);
-app.post('/reviews', ctrl.postReviews);
-app.put('/reviews/:review_id/helpful', ctrl.markHelpful);
-app.put('/reviews/:review_id/report', ctrl.report);
 
 // listening on port 8080
 
