@@ -1,11 +1,11 @@
 const { client } = require('../db');
+
 /**
- *
- * @param {int} product_id
- * @param {int} page
- * @param {int} count
- * @param {string} sort - "newest", "helpful", or "relevant"
- * @returns {Promise} query
+ * @param int product_id
+ * @param int page
+ * @param int count
+ * @param string sort - "newest", "helpful", or "relevant"
+ * @returns Promise pg-query
  */
 exports.reviewsQuery = ({ product_id, page, count, sort }) => {
   const sortQuery = sort === 'newest' ? 'date asc' : 'helpfulness desc';
@@ -27,8 +27,8 @@ exports.reviewsQuery = ({ product_id, page, count, sort }) => {
     ) AS data
     ORDER BY ${sortQuery}
     LIMIT ${count} OFFSET (${count} * (${page} - 1))
-  `)
-}
+  `);
+};
 
 /**
  *
@@ -100,4 +100,4 @@ exports.metaQuery = ({ product_id }) => {
       )
     ) data
   `);
-}
+};

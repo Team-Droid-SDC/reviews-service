@@ -1,9 +1,7 @@
-/* eslint-disable no-undef */
 const assert = require('assert');
 const { client } = require('../db');
 const models = require('../server/models');
 
-// close db connection after all tests to exit mocha test
 after(async () => {
   client.end();
 });
@@ -25,6 +23,7 @@ describe('Database Connection', () => {
     assert.equal(results[3].rows.length, 15);
   });
 });
+
 describe('Model queries', () => {
   describe('ReviewsQuery', () => {
     it('should find reviews by id, page, and count', async () => {
@@ -118,6 +117,7 @@ describe('Model queries', () => {
       }
     });
   });
+
   describe('MetaQuery', () => {
     it('FILL IN', async () => {
     });

@@ -1,5 +1,3 @@
--- load command: psql -d db_name -f [filepath]
-
 -----------------
 -- DB creation --
 -----------------
@@ -48,7 +46,6 @@ copy reviews_photos from '/home/gilcohen67/hackreactor/rfp2204/sdc/reviews-servi
 copy characteristics from '/home/gilcohen67/hackreactor/rfp2204/sdc/reviews-service/db/hardDataStore/characteristics.csv' csv header;
 copy characteristic_reviews from '/home/gilcohen67/hackreactor/rfp2204/sdc/reviews-service/db/hardDataStore/characteristic_reviews.csv' csv header;
 select now();
-
 
 ---------
 -- ETL --

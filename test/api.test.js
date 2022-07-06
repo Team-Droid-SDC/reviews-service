@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 const chakram = require('chakram');
 require('env').config();
+
 describe('Server', () => {
   describe('Get Reviews', () => {
     it('should fetch reviews', () => {
